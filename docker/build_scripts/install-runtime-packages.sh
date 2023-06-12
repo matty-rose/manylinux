@@ -32,7 +32,7 @@ source $MY_DIR/build_utils.sh
 
 
 # MANYLINUX_DEPS: Install development packages (except for libgcc which is provided by gcc install)
-if [ "${AUDITWHEEL_POLICY}" == "manylinux2014" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ]; then
+if [ "${AUDITWHEEL_POLICY}" == "manylinux2014" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_31" ]; then
 	MANYLINUX_DEPS="glibc-devel libstdc++-devel glib2-devel libX11-devel libXext-devel libXrender-devel mesa-libGL-devel libICE-devel libSM-devel zlib-devel expat-devel"
 elif [ "${AUDITWHEEL_POLICY}" == "musllinux_1_1" ]; then
 	MANYLINUX_DEPS="musl-dev libstdc++ glib-dev libx11-dev libxext-dev libxrender-dev mesa-dev libice-dev libsm-dev zlib-dev expat-dev"
@@ -42,9 +42,9 @@ else
 fi
 
 # RUNTIME_DEPS: Runtime dependencies. c.f. install-build-packages.sh
-if [ "${AUDITWHEEL_POLICY}" == "manylinux2014" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ]; then
-	RUNTIME_DEPS="zlib bzip2 expat ncurses readline gdbm libpcap xz openssl keyutils-libs libkadm5 libcom_err libidn libcurl uuid libffi libdb"
-    if [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ]; then
+if [ "${AUDITWHEEL_POLICY}" == "manylinux2014" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_31" ]; then
+	RUNTIME_DEPS="zlib bzip2 expat ncurses readline gdbm libpcap xz openssl keyutils-libs libkadm5 libcom_err libidn2 libcurl uuid libffi libdb"
+    if [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_31" ]; then
         RUNTIME_DEPS="${RUNTIME_DEPS} tk"
     fi
 elif [ "${AUDITWHEEL_POLICY}" == "musllinux_1_1" ]; then
@@ -95,10 +95,10 @@ elif [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ]; then
 	sed -i '/^override_install_langs=/d' /etc/yum.conf
 	dnf -y upgrade
 	dnf -y install dnf-plugins-core
-	dnf config-manager --set-enabled powertools # for yasm
+	dnf config-manager --set-enabled crb # for yasm
 	TOOLCHAIN_DEPS="gcc-toolset-12-binutils gcc-toolset-12-gcc gcc-toolset-12-gcc-c++ gcc-toolset-12-gcc-gfortran"
 	if [ "${AUDITWHEEL_ARCH}" == "x86_64" ]; then
-		TOOLCHAIN_DEPS="${TOOLCHAIN_DEPS} yasm"
+		TOOLCHAIN_DEPS="${TOOLCHAIN_DEPS} nasm"
 	fi
 elif [ "${AUDITWHEEL_POLICY}" == "musllinux_1_1" ]; then
 	TOOLCHAIN_DEPS="binutils gcc g++ gfortran"

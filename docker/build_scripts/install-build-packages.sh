@@ -9,7 +9,7 @@ set -exuo pipefail
 # make sure the corresponding library is added to RUNTIME_DEPS if applicable
 
 if [ "${AUDITWHEEL_POLICY}" == "manylinux2014" ] || [ "${AUDITWHEEL_POLICY}" == "manylinux_2_28" ]; then
-	COMPILE_DEPS="bzip2-devel ncurses-devel readline-devel gdbm-devel libpcap-devel xz-devel openssl openssl-devel keyutils-libs-devel krb5-devel libcom_err-devel libidn-devel curl-devel uuid-devel libffi-devel kernel-headers libdb-devel"
+	COMPILE_DEPS="bzip2-devel ncurses-devel readline-devel gdbm-devel libpcap-devel xz-devel openssl openssl-devel keyutils-libs-devel krb5-devel libcom_err-devel libidn2-devel curl-devel uuid-devel libffi-devel kernel-headers libdb-devel"
 	if [ "${AUDITWHEEL_POLICY}" == "manylinux2014" ]; then
 		PACKAGE_MANAGER=yum
 	else
